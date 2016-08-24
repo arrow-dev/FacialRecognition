@@ -43,6 +43,7 @@ function sendFaceDetectRequest(file, callback) {
         }
     })
         .fail(function (error) {
+        alert("Could not find a face.");
     });
 }
 var Face = (function () {
