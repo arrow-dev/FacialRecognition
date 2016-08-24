@@ -17,7 +17,7 @@ function checkImage(callback) {
         alert("Invalid File!");
     }
     myFileReader.onloadend = function () {
-        if (!myFile.name.match(/\.(jpg|jpeg|png))$/)) {
+        if (!myFile.name.match(/\.(jpg|jpeg|png)$/)) {
             alert("Invalid File!");
         }
         else {
