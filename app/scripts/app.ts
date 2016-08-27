@@ -4,7 +4,7 @@ myFileSelector.addEventListener("change", function () {
     //Check the image file is valid
     checkImage(function (myFile) {
         sendFaceDetectRequest(myFile, function(faceId){
-            alert(faceId);
+            console.log(faceId);
         })
     });
 });
@@ -54,10 +54,15 @@ function sendFaceDetectRequest(file, callback){
 
 class Face {
     FaceId : String;
-    FaceAttributes: Object;
+    FaceUrl: String;
 
-    constructor(id:String, faceAttr:Object){
+    constructor(id:String, url:String){
         this.FaceId = id;
-        this.FaceAttributes = faceAttr;
+        this.FaceUrl = url;
     }
+}
+
+function createFaceList(){
+    var myReader = new FileReader;
+    
 }
