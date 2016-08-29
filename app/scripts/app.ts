@@ -5,7 +5,17 @@ myFileSelector.addEventListener("change", function () {
     checkImage(function (myFile) {
         sendFaceDetectRequest(myFile, function(faceId){
             console.log(faceId);
+            sendFindSimilarRequest(faceId, function(result){
+                result.forEach(element => {
+                    console.log(element.persistedFaceId);
+                });
+            })
         })
+    });
+    sendGetListRequest(function(data){
+        data.persistedFaces.forEach(element => {
+            console.log(element.userData);
+        });
     });
 });
 
@@ -52,17 +62,48 @@ function sendFaceDetectRequest(file, callback){
     })
 }
 
-class Face {
-    FaceId : String;
-    FaceUrl: String;
-
-    constructor(id:String, url:String){
-        this.FaceId = id;
-        this.FaceUrl = url;
-    }
+function sendFindSimilarRequest(faceId, callback){
+    $.ajax({
+        url: "https://api.projectoxford.ai/face/v1.0/findsimilars",
+        beforeSend: function(xhrObj){
+            xhrObj.setRequestHeader("Content-Type", "application/json");
+            xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", "9da3ade20681481bb489a91e206a37c9");
+        },
+        type: "POST",
+        data: JSON.stringify({
+            faceId: faceId,
+            faceListId: "celebs",
+            maxNumOfCandidatesReturned:10,
+            mode: "matchFace"
+        })
+    })
+    .done(function(data) {
+            if(data.length != 0){
+                callback(data);
+            }
+        })
+    .fail(function() {
+            alert("error");
+        });
 }
 
-function createFaceList(){
-    var myReader = new FileReader;
-    
+function sendGetListRequest(callback){
+     $.ajax({
+            url: "https://api.projectoxford.ai/face/v1.0/facelists/celebs?",
+            beforeSend: function(xhrObj){
+                // Request headers
+                xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","9da3ade20681481bb489a91e206a37c9");
+            },
+            type: "GET",
+            // Request body
+            data: "{ body }",
+        })
+        .done(function(data) {
+            if(data.length != 0){
+                callback(data);
+            }
+        })
+        .fail(function() {
+            alert("error");
+        });
 }

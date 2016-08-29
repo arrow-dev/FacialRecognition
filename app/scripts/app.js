@@ -3,7 +3,17 @@ myFileSelector.addEventListener("change", function () {
     //Check the image file is valid
     checkImage(function (myFile) {
         sendFaceDetectRequest(myFile, function (faceId) {
-            alert(faceId);
+            console.log(faceId);
+            sendFindSimilarRequest(faceId, function (result) {
+                result.forEach(function (element) {
+                    console.log(element.persistedFaceId);
+                });
+            });
+        });
+    });
+    sendGetListRequest(function (data) {
+        data.persistedFaces.forEach(function (element) {
+            console.log(element.userData);
         });
     });
 });
@@ -46,10 +56,47 @@ function sendFaceDetectRequest(file, callback) {
         alert("Could not find a face.");
     });
 }
-var Face = (function () {
-    function Face(id, faceAttr) {
-        this.FaceId = id;
-        this.FaceAttributes = faceAttr;
-    }
-    return Face;
-}());
+function sendFindSimilarRequest(faceId, callback) {
+    $.ajax({
+        url: "https://api.projectoxford.ai/face/v1.0/findsimilars",
+        beforeSend: function (xhrObj) {
+            xhrObj.setRequestHeader("Content-Type", "application/json");
+            xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", "9da3ade20681481bb489a91e206a37c9");
+        },
+        type: "POST",
+        data: JSON.stringify({
+            faceId: faceId,
+            faceListId: "celebs",
+            maxNumOfCandidatesReturned: 10,
+            mode: "matchFace"
+        })
+    })
+        .done(function (data) {
+        if (data.length != 0) {
+            callback(data);
+        }
+    })
+        .fail(function () {
+        alert("error");
+    });
+}
+function sendGetListRequest(callback) {
+    $.ajax({
+        url: "https://api.projectoxford.ai/face/v1.0/facelists/celebs?",
+        beforeSend: function (xhrObj) {
+            // Request headers
+            xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", "9da3ade20681481bb489a91e206a37c9");
+        },
+        type: "GET",
+        // Request body
+        data: "{ body }",
+    })
+        .done(function (data) {
+        if (data.length != 0) {
+            callback(data);
+        }
+    })
+        .fail(function () {
+        alert("error");
+    });
+}
