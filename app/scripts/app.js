@@ -17,7 +17,7 @@ myFileSelector.addEventListener("change", function () {
             sendFindSimilarRequest(faceId, function (result) {
                 result.forEach(function (element) {
                     getUserData(element.persistedFaceId, function (userData) {
-                        console.log(userData.url);
+                        console.log(userData.name + " " + userData.url);
                         $("div #images").append("<img src=" + userData.url + ">");
                     });
                 });
