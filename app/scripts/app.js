@@ -18,6 +18,7 @@ myFileSelector.addEventListener("change", function () {
                 result.forEach(function (element) {
                     getUserData(element.persistedFaceId, function (userData) {
                         console.log(userData.url);
+                        $("div #images").append("<img src=" + userData.url + ">");
                     });
                 });
             });
@@ -73,7 +74,7 @@ function sendFindSimilarRequest(faceId, callback) {
         type: "POST",
         data: JSON.stringify({
             faceId: faceId,
-            faceListId: "celebs",
+            faceListId: "celeblist",
             maxNumOfCandidatesReturned: 5,
             mode: "matchFace"
         })
@@ -89,7 +90,7 @@ function sendFindSimilarRequest(faceId, callback) {
 }
 function sendGetListRequest(callback) {
     $.ajax({
-        url: "https://api.projectoxford.ai/face/v1.0/facelists/celebs?",
+        url: "https://api.projectoxford.ai/face/v1.0/facelists/celeblist?",
         beforeSend: function (xhrObj) {
             // Request headers
             xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", "9da3ade20681481bb489a91e206a37c9");

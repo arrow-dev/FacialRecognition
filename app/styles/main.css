@@ -15,6 +15,12 @@ input#myFileSelector {
   display: none;
 }
 
+div#images img {
+  width: 50%;
+  height: 30em;
+  float: left;
+}
+
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .header,
 .marketing,
