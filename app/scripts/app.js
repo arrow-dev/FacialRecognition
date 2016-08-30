@@ -1,19 +1,26 @@
 var myFileSelector = $("#myFileSelector")[0];
+var myFaceList;
+window.onload = function () {
+    sendGetListRequest(function (data) {
+        myFaceList = data.persistedFaces;
+        //myFaceList.forEach(element => {
+        //console.log(element.persistedFaceId + " " + element.userData)
+        //});
+    });
+};
 myFileSelector.addEventListener("change", function () {
     //Check the image file is valid
     checkImage(function (myFile) {
+        //Send faceDetectRequest for the valid file
         sendFaceDetectRequest(myFile, function (faceId) {
-            console.log(faceId);
+            //Send findSimilarRequest for the result
             sendFindSimilarRequest(faceId, function (result) {
                 result.forEach(function (element) {
-                    console.log(element.persistedFaceId);
+                    getUserData(element.persistedFaceId, function (userData) {
+                        console.log(userData.url);
+                    });
                 });
             });
-        });
-    });
-    sendGetListRequest(function (data) {
-        data.persistedFaces.forEach(function (element) {
-            console.log(element.userData);
         });
     });
 });
@@ -53,7 +60,7 @@ function sendFaceDetectRequest(file, callback) {
         }
     })
         .fail(function (error) {
-        alert("Could not find a face.");
+        alert("Could not detect your face! Please try another image.");
     });
 }
 function sendFindSimilarRequest(faceId, callback) {
@@ -67,7 +74,7 @@ function sendFindSimilarRequest(faceId, callback) {
         data: JSON.stringify({
             faceId: faceId,
             faceListId: "celebs",
-            maxNumOfCandidatesReturned: 10,
+            maxNumOfCandidatesReturned: 5,
             mode: "matchFace"
         })
     })
@@ -98,5 +105,13 @@ function sendGetListRequest(callback) {
     })
         .fail(function () {
         alert("error");
+    });
+}
+function getUserData(persistedFaceId, callback) {
+    myFaceList.forEach(function (element) {
+        if (element.persistedFaceId == persistedFaceId) {
+            var userData = JSON.parse(element.userData);
+            callback(userData);
+        }
     });
 }
