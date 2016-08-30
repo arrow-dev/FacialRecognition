@@ -20,9 +20,7 @@ myFileSelector.addEventListener("change", function () {
                 result.forEach(element => {
                     getUserData(element.persistedFaceId, function(userData){
                         console.log(userData.name + " " + userData.url);
-                        var img = $("<img>");
-                        img.attr("src", userData.url);
-                        $("images").append(img);
+                        $("div #images").append("<img src=" + userData.url + ">");
                     });
                 });
             })
@@ -84,7 +82,7 @@ function sendFindSimilarRequest(faceId, callback){
         data: JSON.stringify({
             faceId: faceId,
             faceListId: "celeblist",
-            maxNumOfCandidatesReturned:5,
+            maxNumOfCandidatesReturned:1,
             mode: "matchFace"
         })
     })
