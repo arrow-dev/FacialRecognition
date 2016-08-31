@@ -1,5 +1,4 @@
 node_modules
 .tmp
-bower_components/chai
-bower_components/mocha
+bower_components
 test/bower_components
