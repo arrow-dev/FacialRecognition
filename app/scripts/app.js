@@ -1,7 +1,7 @@
-var myFileSelector = $("#myFileSelector")[0];
+var myFileSelector = $('#myFileSelector')[0];
 var myFaceList;
 sendGetListRequest(function (data) { myFaceList = data.persistedFaces; });
-myFileSelector.addEventListener("change", function () {
+myFileSelector.addEventListener('change', function () {
     //Check the image file is valid
     checkImage(function (myFile) {
         //Send faceDetectRequest for the valid file
@@ -10,11 +10,11 @@ myFileSelector.addEventListener("change", function () {
             sendFindSimilarRequest(faceId, function (result) {
                 result.forEach(function (element) {
                     getUserData(element.persistedFaceId, function (userData) {
-                        console.log(userData.name + " " + userData.url);
+                        console.log(userData.name + ' ' + userData.url);
                         var img = $('<img>').attr({
                             src: userData.url
                         });
-                        $("div #images").append(img);
+                        $('div #images').append(img);
                     });
                 });
             });
@@ -28,11 +28,11 @@ function checkImage(callback) {
         myFileReader.readAsDataURL(myFile);
     }
     else {
-        alert("Invalid File!");
+        alert('Invalid File!');
     }
     myFileReader.onloadend = function () {
         if (!myFile.name.match(/\.(jpg|jpeg|png)$/)) {
-            alert("Invalid File!");
+            alert('Invalid File!');
         }
         else {
             callback(myFile);
@@ -41,12 +41,12 @@ function checkImage(callback) {
 }
 function sendFaceDetectRequest(file, callback) {
     $.ajax({
-        url: "https://api.projectoxford.ai/face/v1.0/detect",
+        url: 'https://api.projectoxford.ai/face/v1.0/detect',
         beforeSend: function (xhrObj) {
-            xhrObj.setRequestHeader("Content-Type", "application/octet-stream");
-            xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", "9da3ade20681481bb489a91e206a37c9");
+            xhrObj.setRequestHeader('Content-Type', 'application/octet-stream');
+            xhrObj.setRequestHeader('Ocp-Apim-Subscription-Key', '9da3ade20681481bb489a91e206a37c9');
         },
-        type: "POST",
+        type: 'POST',
         data: file,
         processData: false
     })
@@ -57,22 +57,22 @@ function sendFaceDetectRequest(file, callback) {
         }
     })
         .fail(function (error) {
-        alert("Could not detect your face! Please try another image.");
+        alert('Could not detect your face! Please try another image.');
     });
 }
 function sendFindSimilarRequest(faceId, callback) {
     $.ajax({
-        url: "https://api.projectoxford.ai/face/v1.0/findsimilars",
+        url: 'https://api.projectoxford.ai/face/v1.0/findsimilars',
         beforeSend: function (xhrObj) {
-            xhrObj.setRequestHeader("Content-Type", "application/json");
-            xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", "9da3ade20681481bb489a91e206a37c9");
+            xhrObj.setRequestHeader('Content-Type', 'application/json');
+            xhrObj.setRequestHeader('Ocp-Apim-Subscription-Key', '9da3ade20681481bb489a91e206a37c9');
         },
-        type: "POST",
+        type: 'POST',
         data: JSON.stringify({
             faceId: faceId,
-            faceListId: "master",
+            faceListId: 'master',
             maxNumOfCandidatesReturned: 6,
-            mode: "matchFace"
+            mode: 'matchFace'
         })
     })
         .done(function (data) {
@@ -81,19 +81,19 @@ function sendFindSimilarRequest(faceId, callback) {
         }
     })
         .fail(function () {
-        alert("error");
+        alert('error');
     });
 }
 function sendGetListRequest(callback) {
     $.ajax({
-        url: "https://api.projectoxford.ai/face/v1.0/facelists/master?",
+        url: 'https://api.projectoxford.ai/face/v1.0/facelists/master?',
         beforeSend: function (xhrObj) {
             // Request headers
-            xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", "9da3ade20681481bb489a91e206a37c9");
+            xhrObj.setRequestHeader('Ocp-Apim-Subscription-Key', '9da3ade20681481bb489a91e206a37c9');
         },
-        type: "GET",
+        type: 'GET',
         // Request body
-        data: "{ body }",
+        data: '{ body }',
     })
         .done(function (data) {
         if (data.length != 0) {
@@ -101,7 +101,7 @@ function sendGetListRequest(callback) {
         }
     })
         .fail(function () {
-        alert("error");
+        alert('error');
     });
 }
 function getUserData(persistedFaceId, callback) {
