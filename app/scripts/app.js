@@ -11,7 +11,10 @@ myFileSelector.addEventListener("change", function () {
                 result.forEach(function (element) {
                     getUserData(element.persistedFaceId, function (userData) {
                         console.log(userData.name + " " + userData.url);
-                        $("div #images").append("<img src=" + userData.url + ">");
+                        var img = $('<img>').attr({
+                            src: userData.url
+                        });
+                        $("div #images").append(img);
                     });
                 });
             });
