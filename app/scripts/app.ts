@@ -1,14 +1,7 @@
 var myFileSelector : HTMLInputElement = <HTMLInputElement>$("#myFileSelector")[0];
 var myFaceList;
 
-window.onload = ()=>{
-    sendGetListRequest((data)=>{
-        myFaceList = data.persistedFaces;
-        //myFaceList.forEach(element => {
-            //console.log(element.persistedFaceId + " " + element.userData)
-        //});
-    });
-}
+sendGetListRequest((data)=>{ myFaceList = data.persistedFaces; });
 
 myFileSelector.addEventListener("change", function () {
     //Check the image file is valid
@@ -81,8 +74,8 @@ function sendFindSimilarRequest(faceId, callback){
         type: "POST",
         data: JSON.stringify({
             faceId: faceId,
-            faceListId: "celeblist",
-            maxNumOfCandidatesReturned:1,
+            faceListId: "master",
+            maxNumOfCandidatesReturned:6,
             mode: "matchFace"
         })
     })
@@ -98,7 +91,7 @@ function sendFindSimilarRequest(faceId, callback){
 
 function sendGetListRequest(callback){
      $.ajax({
-            url: "https://api.projectoxford.ai/face/v1.0/facelists/celeblist?",
+            url: "https://api.projectoxford.ai/face/v1.0/facelists/master?",
             beforeSend: function(xhrObj){
                 // Request headers
                 xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","9da3ade20681481bb489a91e206a37c9");
