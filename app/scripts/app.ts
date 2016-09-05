@@ -4,6 +4,7 @@ var myFaceList;
 sendGetListRequest((data)=>{ myFaceList = data.persistedFaces; });
 
 myFileSelector.addEventListener("change", function () {
+    $("div #images").children
     //Check the image file is valid
     checkImage(function (myFile) {
         //Send faceDetectRequest for the valid file
@@ -58,12 +59,17 @@ function sendFaceDetectRequest(file, callback){
     })
     .done(function (data) {
         if(data.length != 0){
-            var faceId : String = data[0].faceId;
+            //console.log(data);
+            var faceId  = data[0].faceId;
             callback(faceId);
+        }
+        else{
+            alert("Could not detect a face, please try another image!");
         }
     })
     .fail(function (error) {
-        alert("Could not detect your face! Please try another image.")
+        var json = JSON.parse(error.responseText);
+        alert(json.error.message);
     })
 }
 
@@ -84,6 +90,7 @@ function sendFindSimilarRequest(faceId, callback){
     })
     .done(function(data) {
             if(data.length != 0){
+                //console.log(data);
                 callback(data);
             }
         })
@@ -105,6 +112,7 @@ function sendGetListRequest(callback){
         })
         .done(function(data) {
             if(data.length != 0){
+                //console.log(data);
                 callback(data);
             }
         })
