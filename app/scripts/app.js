@@ -2,7 +2,7 @@ var myFileSelector = $('#myFileSelector')[0];
 var myFaceList;
 sendGetListRequest(function (data) { myFaceList = data.persistedFaces; });
 myFileSelector.addEventListener('change', function () {
-    $('div #images').children;
+    $('div #images').empty();
     //Check the image file is valid
     checkImage(function (myFile) {
         //Send faceDetectRequest for the valid file
