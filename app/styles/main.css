@@ -5,8 +5,12 @@
   padding: 0.2em 0;
 }
 
-/* Space out content a bit */
-body {
+body { 
+  background: url(../images/background.jpg) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
   padding-top: 20px;
   padding-bottom: 20px;
 }
@@ -16,9 +20,11 @@ input#myFileSelector {
 }
 
 div#images img {
-  width: 50%;
-  height: 30em;
-  float: left;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2em;
+  max-width: 100%;
+  height: 27em;
 }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
@@ -31,7 +37,7 @@ div#images img {
 
 /* Custom page header */
 .header {
-  border-bottom: 1px solid #e5e5e5;
+  margin-top: 150px;
 }
 
 /* Make the masthead heading the same height as the navigation */
@@ -46,7 +52,6 @@ div#images img {
 .footer {
   padding-top: 19px;
   color: #777;
-  border-top: 1px solid #e5e5e5;
 }
 
 .container-narrow > hr {
@@ -55,8 +60,9 @@ div#images img {
 
 /* Main marketing message and sign up button */
 .jumbotron {
+  background-color: rgba(255,255,255,0.8);
   text-align: center;
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid #000;
 }
 
 .jumbotron .btn {

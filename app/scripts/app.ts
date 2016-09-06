@@ -14,10 +14,16 @@ myFileSelector.addEventListener("change", function () {
                 result.forEach(element => {
                     getUserData(element.persistedFaceId, function(userData){
                         console.log(userData.name + " " + userData.url);
+                        var div = $('<div>').attr({
+                            class: 'col-xs-12 col-sm-6 imgItem'
+                        });
                         var img = $('<img>').attr({
                             src: userData.url
                         });
-                        $("div #images").append(img);
+                        var title = $('<h3>').append(userData.name);
+                        var confidence = $('<h4>').append(Math.round(element.confidence * 100) + "% Match");
+                        div.append(img, title, confidence);
+                        $("div #images").append(div);
                     });
                 });
             })
