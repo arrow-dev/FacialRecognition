@@ -1,8 +1,10 @@
 var myFileSelector = $('#myFileSelector')[0];
 var myFaceList;
+var myBtn = $('#btnStart')[0];
 sendGetListRequest(function (data) { myFaceList = data.persistedFaces; });
 myFileSelector.addEventListener('change', function () {
-    $('div #images').empty();
+    myBtn.style.visibility = 'hidden';
+    $('#images').empty();
     //Check the image file is valid
     checkImage(function (myFile) {
         //Send faceDetectRequest for the valid file
@@ -15,13 +17,20 @@ myFileSelector.addEventListener('change', function () {
                         var div = $('<div>').attr({
                             class: 'col-xs-12 col-sm-6 imgItem'
                         });
-                        var img = $('<img>').attr({
-                            src: userData.url
-                        });
                         var title = $('<h3>').append(userData.name);
                         var confidence = $('<h4>').append(Math.round(element.confidence * 100) + '% Match');
-                        div.append(img, title, confidence);
-                        $('div #images').append(div);
+                        var loaderImage = $('<img>').attr({
+                            src: '../images/loader.gif'
+                        });
+                        var img = $('<img>').attr({
+                            src: userData.url
+                        }).on('load', function () {
+                            loaderImage.hide();
+                            img.show();
+                        }).hide();
+                        div.append(loaderImage, img, title, confidence);
+                        $('#images').append(div);
+                        myBtn.style.visibility = 'visible';
                     });
                 });
             });
@@ -35,11 +44,11 @@ function checkImage(callback) {
         myFileReader.readAsDataURL(myFile);
     }
     else {
-        alert('Invalid File!');
+        alert('You must select a file!');
     }
     myFileReader.onloadend = function () {
         if (!myFile.name.match(/\.(jpg|jpeg|png)$/)) {
-            alert('Invalid File!');
+            alert('Invalid file!');
         }
         else {
             callback(myFile);
@@ -65,6 +74,7 @@ function sendFaceDetectRequest(file, callback) {
         }
         else {
             alert('Could not detect a face, please try another image!');
+            myBtn.style.visibility = 'visible';
         }
     })
         .fail(function (error) {
@@ -95,6 +105,7 @@ function sendFindSimilarRequest(faceId, callback) {
     })
         .fail(function () {
         alert('error');
+        myBtn.style.visibility = 'visible';
     });
 }
 function sendGetListRequest(callback) {
@@ -112,10 +123,11 @@ function sendGetListRequest(callback) {
         if (data.length != 0) {
             //console.log(data);
             callback(data);
+            myBtn.style.visibility = 'visible';
         }
     })
         .fail(function () {
-        alert('error');
+        alert('Something went wrong, try refreshing the page.');
     });
 }
 function getUserData(persistedFaceId, callback) {
