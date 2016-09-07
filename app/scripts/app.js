@@ -1,9 +1,13 @@
 var myFileSelector = $('#myFileSelector')[0];
-var myFaceList;
+var loading = $('#loading')[0];
 var myBtn = $('#btnStart')[0];
-sendGetListRequest(function (data) { myFaceList = data.persistedFaces; });
+var myFaceList;
+sendGetListRequest(function (data) {
+    myFaceList = data.persistedFaces;
+    toggleLoading(false);
+});
 myFileSelector.addEventListener('change', function () {
-    myBtn.style.visibility = 'hidden';
+    toggleLoading(true);
     $('#images').empty();
     //Check the image file is valid
     checkImage(function (myFile) {
@@ -30,7 +34,7 @@ myFileSelector.addEventListener('change', function () {
                         }).hide();
                         div.append(loaderImage, img, title, confidence);
                         $('#images').append(div);
-                        myBtn.style.visibility = 'visible';
+                        toggleLoading(false);
                     });
                 });
             });
@@ -45,10 +49,12 @@ function checkImage(callback) {
     }
     else {
         alert('You must select a file!');
+        toggleLoading(false);
     }
     myFileReader.onloadend = function () {
         if (!myFile.name.match(/\.(jpg|jpeg|png)$/)) {
             alert('Invalid file!');
+            toggleLoading(false);
         }
         else {
             callback(myFile);
@@ -74,7 +80,7 @@ function sendFaceDetectRequest(file, callback) {
         }
         else {
             alert('Could not detect a face, please try another image!');
-            myBtn.style.visibility = 'visible';
+            toggleLoading(false);
         }
     })
         .fail(function (error) {
@@ -105,7 +111,7 @@ function sendFindSimilarRequest(faceId, callback) {
     })
         .fail(function () {
         alert('error');
-        myBtn.style.visibility = 'visible';
+        toggleLoading(false);
     });
 }
 function sendGetListRequest(callback) {
@@ -123,11 +129,11 @@ function sendGetListRequest(callback) {
         if (data.length != 0) {
             //console.log(data);
             callback(data);
-            myBtn.style.visibility = 'visible';
         }
     })
         .fail(function () {
         alert('Something went wrong, try refreshing the page.');
+        toggleLoading(false);
     });
 }
 function getUserData(persistedFaceId, callback) {
@@ -137,4 +143,14 @@ function getUserData(persistedFaceId, callback) {
             callback(userData);
         }
     });
+}
+function toggleLoading(bool) {
+    if (bool) {
+        myBtn.style.visibility = 'hidden';
+        loading.style.visibility = 'visible';
+    }
+    else {
+        myBtn.style.visibility = 'visible';
+        loading.style.visibility = 'hidden';
+    }
 }

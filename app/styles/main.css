@@ -19,7 +19,12 @@ body {
   padding-top: 20px;
   padding-bottom: 20px;
 }
-
+#loading {
+  width: 10%;
+  display: block;
+  margin: auto;
+  margin-top: 1em;
+}
 input#myFileSelector {
   display: none;
 }
