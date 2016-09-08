@@ -25,7 +25,8 @@ myFileSelector.addEventListener("change", function () {
                         var title = $('<h3>').append(userData.name);
                         var confidence = $('<h4>').append(Math.round(element.confidence * 100) + "% Match");
                         var loaderImage = $('<img>').attr({
-                            src: '../images/loader.gif'
+                            src: '../images/loader.gif',
+                            alt: 'Image could not be loadedB'
                         });
                         var img = $('<img>').attr({
                             src: userData.url
